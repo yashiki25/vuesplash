@@ -39,8 +39,7 @@ services:
     ports:
       - "3306:3306"
     volumes:
-      - "./storage/mysql:/var/lib/mysql"
-      # - mysql-store:/var/lib/mysql
+      - "mysql_store:/var/lib/mysql"
     environment:
       MYSQL_DATABASE: ${DB_DATABASE:-laravel}
       MYSQL_USER: ${DB_USERNAME:-root}
@@ -48,9 +47,11 @@ services:
       MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root}
 
   redis:
-    image: redis:5.0-alpine
+    image: redis:6.0.8-alpine
     ports:
       - "6379:6379"
+    volumes:
+      - "redis_store:/data"
 
   queue_worker:
     build: "./.docker/php"
@@ -85,5 +86,6 @@ services:
     ports:
       - "9090:80"
 
-# volumes:
-#   mysql-store:
+volumes:
+  mysql_store:
+  redis_store:
