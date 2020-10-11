@@ -21,7 +21,7 @@ init:
 	cp .env.example .env
 	docker-compose up -d --build
 	@make composer-install
-	@make npm-install
+	@make yarn-install
 	docker-compose exec app php artisan key:generate
 	@echo Initialize Completed !!
 
@@ -53,6 +53,10 @@ nginx:
 .PHONY: app
 app:
 	docker-compose exec app bash
+
+.PHONY: node
+node:
+	docker-compose exec node sh
 
 .PHONY: asset
 asset:
@@ -90,9 +94,9 @@ tinker:
 composer-install:
 	docker-compose exec app composer install
 
-.PHONY: npm-install
-npm-install:
-	docker-compose exec app npm install
+.PHONY: yarn-install
+yarn-install:
+	docker-compose exec node yarn
 
 .PHONY: config
 config-clear:

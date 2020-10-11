@@ -1,4 +1,20 @@
 version: "3.7"
+
+x-env: &app
+  build: "./.docker/php"
+  working_dir: "/app"
+  volumes:
+    - ".:/app:cached"
+    - "./.docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+  tty: true
+
+x-env: &node
+  image: node:13.8.0-alpine
+  working_dir: "/app"
+  volumes:
+    - "./:/app:cached"
+  tty: true
+
 services:
   nginx:
     build: "./.docker/nginx"
@@ -11,13 +27,12 @@ services:
       - app
 
   app:
-    build: "./.docker/php"
-    working_dir: "/app"
-    volumes:
-      - ".:/app"
-      - "./.docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+    <<: *app
     depends_on:
       - mysql
+
+  node:
+    <<: *node
 
   mysql:
     image: mysql:5.7
@@ -45,15 +60,11 @@ services:
       - ".:/app"
       - "./.docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
 
-  # asset_watcher:
-  #   build: "./.docker/php"
-  #   working_dir: /app
-  #   command: "npm run watch-poll"
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ".:/app"
-  #     - "./.docker/php/php.ini:/usr/local/etc/php/conf.d/php.ini"
+  asset_watcher:
+    <<: *node
+    command: "yarn run watch-poll"
+    ports:
+      - "3000:3000"
 
   minio:
     image: minio/minio
