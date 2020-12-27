@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -15,4 +16,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('/register', RegisterController::class . '@register')->name('register');
+Route::namespace('Auth')->group(function () {
+    Route::post('/register', 'RegisterController@register')->name('register');
+    Route::post('/login', 'LoginController@login')->name('login');
+    Route::post('/login', 'LoginController@logout')->name('logout');
+});
