@@ -13,7 +13,7 @@ class RegisterApiTest extends TestCase
 
     /**
      * 新規ユーザー登録
-     * @group auth
+     * @group register
      */
     public function testRegisterUser()
     {
