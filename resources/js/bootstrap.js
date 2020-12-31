@@ -35,3 +35,8 @@ window.axios.interceptors.request.use(config => {
 //     cluster: process.env.MIX_PUSHER_APP_CLUSTER,
 //     forceTLS: true
 // });
+
+window.axios.interceptors.response.use(
+  response => response,
+  error => error.response || error
+)
