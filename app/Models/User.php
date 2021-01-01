@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -46,5 +47,14 @@ class User extends Authenticatable
         'updated_at',
         'created_at',
     ];
+
+    /**
+     * 写真
+     * @return HasMany
+     */
+    public function photos(): HasMany
+    {
+        return $this->hasMany(Photo::class);
+    }
 
 }

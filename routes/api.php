@@ -20,7 +20,12 @@ use Illuminate\Support\Facades\Route;
 Route::namespace('Auth')->group(function () {
     Route::post('/register', 'RegisterController@register')->name('register');
     Route::post('/login', 'LoginController@login')->name('login');
-    Route::post('/logout', 'LoginController@logout')->name('logout');
 });
 
 Route::get('/user', fn() => Auth::user())->name('user');
+
+Route::middleware(['auth'])->group(function () {
+    Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
+
+    Route::resource('photos', 'PhotoController', ['only' => ['store', 'destroy']]);
+});
