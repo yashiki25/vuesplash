@@ -36,7 +36,7 @@ class PhotoController extends Controller
      * Store a newly created resource in storage.
      *
      * @param StorePhotoRequest $request
-     * @return void
+     * @return \Illuminate\Http\Response
      */
     public function store(StorePhotoRequest $request)
     {
@@ -56,6 +56,8 @@ class PhotoController extends Controller
                 throw $e;
             }
         });
+
+        return response($photo, 201);
     }
 
     /**

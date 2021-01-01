@@ -37,7 +37,7 @@ class PhotoSubmitApiTest extends TestCase
                 'photo' => UploadedFile::fake()->image('photo.png'),
             ]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
 
         $photo = Photo::first();
 
