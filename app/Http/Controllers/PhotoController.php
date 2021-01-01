@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StorePhotoRequest;
 use App\Models\Photo;
 use Exception;
 use Illuminate\Http\Request;
@@ -34,10 +35,10 @@ class PhotoController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param StorePhotoRequest $request
+     * @return void
      */
-    public function store(Request $request)
+    public function store(StorePhotoRequest $request)
     {
         $extension = $request->photo->extension();
 
