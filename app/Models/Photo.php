@@ -3,7 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Storage;
 
 class Photo extends Model
 {
@@ -23,6 +25,27 @@ class Photo extends Model
         'updated_at',
         'created_at',
     ];
+
+    /** JSONに含めるユーザー定義アクセサ */
+    protected $appends = [
+        'url',
+    ];
+
+    /** JSONに含める属性 */
+    protected $visible = [
+        'id',
+        'owner',
+        'url',
+    ];
+
+    /**
+     * 投稿者
+     * @return BelongsTo
+     */
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id', 'users');
+    }
 
     public function __construct(array $attributes = [])
     {
@@ -61,6 +84,15 @@ class Photo extends Model
         }
 
         return $id;
+    }
+
+    /**
+     * ファイルURLを取得
+     * @return string
+     */
+    public function getUrlAttribute(): string
+    {
+        return Storage::cloud()->url($this->attributes['filename']);
     }
 
 }

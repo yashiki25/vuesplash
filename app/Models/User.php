@@ -48,6 +48,10 @@ class User extends Authenticatable
         'created_at',
     ];
 
+    protected $visible = [
+        'name',
+    ];
+
     /**
      * 写真
      * @return HasMany
