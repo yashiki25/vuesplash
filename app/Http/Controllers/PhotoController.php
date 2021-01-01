@@ -50,7 +50,7 @@ class PhotoController extends Controller
         // インスタンス生成時に作成したランダムIDと拡張子を結合
         $photo->filename = $photo->id . '.' . $extension;
 
-        Storage::disk('s3')->putFileAs('', $request->photo, $photo->filename, 'public');
+        Storage::cloud()->putFileAs('', $request->photo, $photo->filename, 'public');
 
         DB::transaction(function () use ($photo) {
             try {
