@@ -108,4 +108,27 @@ class PhotoController extends Controller
     {
         //
     }
+
+    /**
+     * 写真ダウンロード
+     * @param Photo $photo
+     * @return \Illuminate\Http\Response
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    public function download(Photo $photo)
+    {
+        // 写真の存在チェック
+        if (!Storage::cloud()->exists($photo->filename)) {
+            abort(404);
+        }
+
+        $disposition = "attachment; filename={$photo->filename}";
+        $headers = [
+            'Content-Type' => 'application/octet-stream',
+            // https://developer.mozilla.org/ja/docs/Web/HTTP/Headers/Content-Disposition
+            'Content-Disposition' => $disposition,
+        ];
+
+        return response(Storage::cloud()->get($photo->filename), 200, $headers);
+    }
 }
