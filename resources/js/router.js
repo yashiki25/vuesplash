@@ -5,6 +5,7 @@ import PhotoList from "./pages/PhotoList";
 import PhotoDetail from "./pages/PhotoDetail"
 import Login from "./pages/Login";
 import SystemError from './pages/errors/System.vue'
+import NotFound from './pages/errors/NotFound.vue'
 
 import store from './store';
 
@@ -38,6 +39,10 @@ const routes = [
   {
     path: '/500',
     component: SystemError
+  },
+  {
+    path: '*',
+    component: NotFound
   }
 ]
 
