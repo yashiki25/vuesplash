@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class Photo extends Model
@@ -34,6 +35,8 @@ class Photo extends Model
     /** JSONに含めるユーザー定義アクセサ */
     protected $appends = [
         'url',
+        'likes_count',
+        'liked_by_user',
     ];
 
     /** JSONに含める属性 */
@@ -42,6 +45,8 @@ class Photo extends Model
         'owner',
         'url',
         'comments',
+        'likes_count',
+        'liked_by_user',
     ];
 
     /**
@@ -71,6 +76,39 @@ class Photo extends Model
     {
         return $this->belongsToMany(User::class, 'likes')
             ->withTimestamps();
+    }
+
+    /**
+     * ファイルURLを取得
+     * @return string
+     */
+    public function getUrlAttribute(): string
+    {
+        return Storage::cloud()->url($this->attributes['filename']);
+    }
+
+    /**
+     * 写真のいいね数を取得
+     * @return int
+     */
+    public function getLikesCountAttribute()
+    {
+        return $this->likes->count();
+    }
+
+    /**
+     * ログインユーザーのいいねを取得
+     * @return boolean
+     */
+    public function getLikedByUserAttribute()
+    {
+        if (Auth::guest()) {
+            return false;
+        }
+
+        return $this->likes->contains(function ($user) {
+            return $user->id === Auth::user()->id;
+        });
     }
 
     public function __construct(array $attributes = [])
@@ -110,15 +148,6 @@ class Photo extends Model
         }
 
         return $id;
-    }
-
-    /**
-     * ファイルURLを取得
-     * @return string
-     */
-    public function getUrlAttribute(): string
-    {
-        return Storage::cloud()->url($this->attributes['filename']);
     }
 
 }

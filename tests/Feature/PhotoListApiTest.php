@@ -13,7 +13,7 @@ class PhotoListApiTest extends TestCase
 
     /**
      * 写真一覧JSONを正しい構造で受け取る
-     * @group fetchPhotos
+     * @group photo
      */
     public function testFetchPhotos()
     {
@@ -32,6 +32,8 @@ class PhotoListApiTest extends TestCase
                 'owner' => [
                     'name' => $photo->owner->name,
                 ],
+                'liked_by_user' => false,
+                'likes_count' => 0,
             ];
         })->all();
 

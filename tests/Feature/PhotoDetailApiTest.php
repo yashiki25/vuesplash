@@ -14,7 +14,7 @@ class PhotoDetailApiTest extends TestCase
 
     /**
      * 写真詳細JSONを正しい構造で受け取る
-     * @group fetchPhotoDetail
+     * @group photo
      */
     public function testFetchPhoto()
     {
@@ -45,6 +45,8 @@ class PhotoDetailApiTest extends TestCase
                             'body' => $comment->body,
                         ];
                     })->all(),
+                'liked_by_user' => false,
+                'likes_count' => 0,
             ]);
     }
 }
