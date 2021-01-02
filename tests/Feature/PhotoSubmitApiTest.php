@@ -30,7 +30,7 @@ class PhotoSubmitApiTest extends TestCase
      */
     public function testUploadFile()
     {
-        Storage::fake('s3');
+        Storage::fake('minio');
 
         $response = $this->actingAs($this->user)
             ->json('POST', route('photos.store'), [
@@ -57,7 +57,7 @@ class PhotoSubmitApiTest extends TestCase
         // DBエラーを起こす
         Schema::drop('photos');
 
-        Storage::fake('s3');
+        Storage::fake('minio');
 
         $response = $this->actingAs($this->user)
             ->json('POST', route('photos.store'), [
