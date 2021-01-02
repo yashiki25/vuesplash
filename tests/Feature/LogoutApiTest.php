@@ -24,7 +24,7 @@ class LogoutApiTest extends TestCase
      * 認証済みのユーザーをログアウト
      * @group logout
      */
-    public function testExample()
+    public function testLogout()
     {
         $response = $this->actingAs($this->user)
             ->json('POST', route('logout'));
