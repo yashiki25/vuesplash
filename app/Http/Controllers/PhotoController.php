@@ -67,12 +67,15 @@ class PhotoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
+     * @param string $photoId
      */
-    public function show($id)
+    public function show(string $photoId)
     {
-        //
+        $photo = Photo::with(['owner'])
+            ->where('id', $photoId)
+            ->firstOrFail();
+
+        return response($photo, 200);
     }
 
     /**

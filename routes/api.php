@@ -21,6 +21,7 @@ Route::namespace('Auth')->group(function () {
 
 Route::get('/user', fn() => Auth::user())->name('user');
 Route::get('/photos', 'PhotoController@index')->name('photos.index');
+Route::get('/photos/{id}', 'PhotoController@show')->name('photos.show');
 
 Route::middleware(['auth'])->group(function () {
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
