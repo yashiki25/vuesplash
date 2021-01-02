@@ -28,4 +28,6 @@ Route::middleware(['auth'])->group(function () {
 
     Route::resource('photos', 'PhotoController', ['only' => ['store', 'destroy']]);
     Route::post('/photos/{photo}/comments', 'PhotoController@addComment')->name('photos.comment');
+    Route::put('/photos/{id}/like', 'PhotoController@like')->name('photos.like');
+    Route::delete('/photos/{id}/like', 'PhotoController@unlike')->name('photos.unlike');
 });

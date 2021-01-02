@@ -29,16 +29,6 @@ class PhotoController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      *
      * @param StorePhotoRequest $request
@@ -70,6 +60,7 @@ class PhotoController extends Controller
      * Display the specified resource.
      *
      * @param string $photoId
+     * @return \Illuminate\Http\Response
      */
     public function show(string $photoId)
     {
@@ -78,40 +69,6 @@ class PhotoController extends Controller
             ->firstOrFail();
 
         return response($photo, 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     /**
@@ -155,5 +112,38 @@ class PhotoController extends Controller
             ->firstOrFail();
 
         return response($newComment, 201);
+    }
+
+    /**
+     * いいね
+     * @param string $photoId
+     * @return \Illuminate\Http\Response
+     */
+    public function like(string $photoId)
+    {
+        $photo = Photo::with('likes')
+            ->where('id', $photoId)
+            ->firstOrFail();
+
+        $photo->likes()->detach(Auth::user()->id);
+        $photo->likes()->attach(Auth::user()->id);
+
+        return response(['photo_id' => $photoId], 200);
+    }
+
+    /**
+     * いいね解除
+     * @param string $photoId
+     * @return \Illuminate\Http\Response
+     */
+    public function unlike(string $photoId)
+    {
+        $photo = Photo::with('likes')
+            ->where('id', $photoId)
+            ->firstOrFail();
+
+        $photo->likes()->detach(Auth::user()->id);
+
+        return response(['photo_id' => $photoId], 200);
     }
 }
