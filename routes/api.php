@@ -14,6 +14,13 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// トークンリフレッシュ
+Route::get('/reflesh-token', function (Illuminate\Http\Request $request) {
+    $request->session()->regenerateToken();
+
+    return response()->json();
+});
+
 Route::namespace('Auth')->group(function () {
     Route::post('/register', 'RegisterController@register')->name('register');
     Route::post('/login', 'LoginController@login')->name('login');
