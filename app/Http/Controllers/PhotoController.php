@@ -15,7 +15,7 @@ class PhotoController extends Controller
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return \Illuminate\Http\Response
      */
     public function index()
     {
@@ -23,7 +23,7 @@ class PhotoController extends Controller
             ->orderBy(Photo::CREATED_AT, 'desc')
             ->paginate();
 
-        return $photos;
+        return response($photos, 200);
     }
 
     /**
