@@ -5,6 +5,7 @@ namespace App\Models;
 use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Storage;
 
@@ -39,6 +40,7 @@ class Photo extends Model
         'id',
         'owner',
         'url',
+        'comments',
     ];
 
     /**
@@ -48,6 +50,16 @@ class Photo extends Model
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id', 'users');
+    }
+
+    /**
+     * コメント
+     * @return HasMany
+     */
+    public function comments(): HasMany
+    {
+        return $this->hasMany(Comment::class)
+            ->orderBy('id', 'desc');
     }
 
     public function __construct(array $attributes = [])

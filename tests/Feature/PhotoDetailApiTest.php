@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Comment;
 use App\Models\Photo;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -17,7 +18,10 @@ class PhotoDetailApiTest extends TestCase
      */
     public function testFetchPhoto()
     {
-        factory(Photo::class)->create();
+        factory(Photo::class)->create()->each(function ($photo) {
+            $photo->comments()->saveMany(factory(Comment::class, 3)->make());
+        });
+
         $photo = Photo::first();
 
         $response = $this->json('GET', route('photos.show', [
@@ -31,6 +35,16 @@ class PhotoDetailApiTest extends TestCase
                 'owner' => [
                     'name' => $photo->owner->name,
                 ],
+                'comments' => $photo->comments
+                    ->sortByDesc('id')
+                    ->map(function ($comment) {
+                        return [
+                            'author' => [
+                                'name' => $comment->author->name,
+                            ],
+                            'body' => $comment->body,
+                        ];
+                    })->all(),
             ]);
     }
 }

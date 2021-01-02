@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreCommentRequest;
 use App\Http\Requests\StorePhotoRequest;
+use App\Models\Comment;
 use App\Models\Photo;
 use Exception;
 use Illuminate\Http\Request;
@@ -71,7 +73,7 @@ class PhotoController extends Controller
      */
     public function show(string $photoId)
     {
-        $photo = Photo::with(['owner'])
+        $photo = Photo::with(['owner', 'comments.author'])
             ->where('id', $photoId)
             ->firstOrFail();
 
@@ -133,5 +135,25 @@ class PhotoController extends Controller
         ];
 
         return response(Storage::cloud()->get($photo->filename), 200, $headers);
+    }
+
+    /**
+     * コメント投稿
+     * @param Photo $photo
+     * @param StoreCommentRequest $request
+     * @return \Illuminate\Http\Response
+     */
+    public function addComment(Photo $photo, StoreCommentRequest $request)
+    {
+        $comment = new Comment();
+        $comment->body = $request->get('comment');
+        $comment->user_id = Auth::user()->id;
+        $photo->comments()->save($comment);
+
+        $newComment = Comment::with('author')
+            ->where('id', $comment->id)
+            ->firstOrFail();
+
+        return response($newComment, 201);
     }
 }

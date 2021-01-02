@@ -27,4 +27,5 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/logout', 'Auth\LoginController@logout')->name('logout');
 
     Route::resource('photos', 'PhotoController', ['only' => ['store', 'destroy']]);
+    Route::post('/photos/{photo}/comment', 'PhotoController@addComment')->name('photos.comment');
 });

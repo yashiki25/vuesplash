@@ -147,6 +147,7 @@ return [
 
     'attributes' => [
         'photo' => '写真',
+        'comment' => 'コメント'
     ],
 
 ];
