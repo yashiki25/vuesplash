@@ -21,10 +21,27 @@
       >
         <i class="icon ion-md-arrow-round-down"></i>Download
       </a>
-      <!--コメント投稿-->
+      <!--コメント-->
       <h2 class="photo-detail__title">
         <i class="icon ion-md-chatboxes"></i>Comments
       </h2>
+      <ul v-if="photo.comments.length > 0" class="photo-detail__comments">
+        <li
+          v-for="comment in photo.comments"
+          :key="comment.content"
+          class="photo-detail__commentItem"
+        >
+          <p class="photo-detail__commentBody">
+            {{ comment.body }}
+          </p>
+          <p class="photo-detail__commentInfo">
+            {{ comment.author.name }}
+          </p>
+        </li>
+      </ul>
+      <p v-else>No comments yet.</p>
+
+      <!--コメント投稿-->
       <form v-if="isLogin" @submit.prevent="addComment" class="form">
         <!--エラーメッセージ-->
         <div v-if="commentErrors" class="errors">
@@ -93,6 +110,12 @@ export default {
         this.$store.commit('error/setCode', response.status)
         return false
       }
+
+      // 新しいコメントを含めて表示
+      this.photo.comments = [
+        response.data,
+        ...this.photo.comments
+      ]
     }
   },
   computed: {
